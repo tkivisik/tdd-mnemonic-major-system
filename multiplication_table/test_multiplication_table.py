@@ -60,6 +60,62 @@ def test_adding_to_dimensions(height,width,added_height,added_width,expected_hei
             table.update_width(added_width)
 
 @pytest.mark.parametrize("height,width,added_height,added_width,expected_height,expected_width", [
+    (1, 1, "1", 0, 2, 1),
+    (1, 1, "0", 1, 1, 2),
+])
+def test_adding_valid_int_strings_to_dimensions(height,width,added_height,added_width,expected_height,expected_width):
+    table = mt.MultiplicationTable(height, width, 20)
+    table.update_height(added_height)
+    table.update_width(added_width)
+    assert table.height == expected_height
+    assert table.width == expected_width
+
+@pytest.mark.parametrize("height,width,added_height,added_width,expected_height,expected_width", [
+    (1, 1, 0, "1.0", 1, 2),
+    (1, 1, "1.0", 0, 2, 1),
+])
+def test_adding_valid_float_strings_to_dimensions(height,width,added_height,added_width,expected_height,expected_width):
+    table = mt.MultiplicationTable(height, width, 20)
+    table.update_height(added_height)
+    table.update_width(added_width)
+    assert table.height == expected_height
+    assert table.width == expected_width
+
+@pytest.mark.parametrize("height,width,amount", [
+    (1, 1, "1.1"),
+    (1, 1, "1.5"),
+    (1, 1, "1.9"),
+    (1, 1, "0.1"),
+    (1, 1, "0.9"),
+    (10, 10, "-1.1"),
+    (10, 10, "-1.5"),
+    (10, 10, "-1.9"),
+    (10, 10, "-0.1"),
+    (10, 10, "-0.9"),
+])
+def test_adding_invalid_float_strings_to_height(height,width,amount):
+    table = mt.MultiplicationTable(height, width, 20)
+    with pytest.raises(TypeError):
+        table.update_height(amount)
+
+@pytest.mark.parametrize("height,width,amount", [
+    (1, 1, "1.1"),
+    (1, 1, "1.5"),
+    (1, 1, "1.9"),
+    (1, 1, "0.1"),
+    (1, 1, "0.9"),
+    (10, 10, "-1.1"),
+    (10, 10, "-1.5"),
+    (10, 10, "-1.9"),
+    (10, 10, "-0.1"),
+    (10, 10, "-0.9"),
+])
+def test_adding_invalid_float_strings_to_width(height,width,amount):
+    table = mt.MultiplicationTable(height, width, 20)
+    with pytest.raises(TypeError):
+        table.update_width(amount)
+
+@pytest.mark.parametrize("height,width,added_height,added_width,expected_height,expected_width", [
     (20, 20, -1, 0, 19, 20),
     (20, 20, 0, -1, 20, 19),
     (1, 1, -1, 0, 'error', 1),
@@ -77,9 +133,3 @@ def test_subtracting_from_dimensions(height,width,added_height,added_width,expec
         with pytest.raises(NotPositiveDimensionsException):
             table.update_height(added_height)
             table.update_width(added_width)
-
-
-#@pytest.mark.parametrize("height,width,added_height,added_width,expected_height,expected_width", [
-#    (mt.DIMENSION_MAX, mt.DIMENSION_MAX, -1, 0, mt.DIMENSION_MAX-1, mt.DIMENSION_MAX),
-#    (mt.DIMENSION_MAX, mt.DIMENSION_MAX, 0, -1, mt.DIMENSION_MAX, mt.DIMENSION_MAX-1)
-#])

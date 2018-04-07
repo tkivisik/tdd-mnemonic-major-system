@@ -30,9 +30,43 @@ class MultiplicationTable(object):
         return table_string
     
     def update_height(self, amount):
+        amount = MultiplicationTable.verify_intable(amount)
         self.height = self.height + amount
         self.verify_dimensions()
 
     def update_width(self, amount):
+        amount = MultiplicationTable.verify_intable(amount)
         self.width = self.width + amount
         self.verify_dimensions()
+
+    @staticmethod
+    def verify_intable(element):
+        if isinstance(element, int):
+            return element
+        else:
+            try:
+                if abs(int(float(element)) - float(element)) < 0.00001:
+                    return int(float(element))
+            except:
+                raise TypeError("Was expecting a whole number")
+
+
+def main():
+    table = MultiplicationTable(10,10)
+    while True:
+        print("This is your multiplication table")
+        print(table.show_table_string())
+        print('')
+        print("Enter 'x' to exit")
+        print("Enter how much you would like to change the dimenstions")
+        input = raw_input("Separate amounts by commas (height, width):")
+        if input in ['x', 'exit', 'quit']:
+            break
+        if input.find(",") == -1:
+            continue
+        height_change, width_change = input.split(",")[0], input.split(",")[1]
+        table.update_height(height_change)
+        table.update_width(width_change)
+
+if __name__ == '__main__':
+    main()
