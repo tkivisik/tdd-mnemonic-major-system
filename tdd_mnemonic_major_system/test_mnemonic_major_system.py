@@ -46,3 +46,5 @@ def test_character_to_digit_conversion_vocals(map, character, expected):
     ])
 def test_string_to_digits_conversion_vocals(map, string, expected):
     assert map.string_to_digits(string) == expected
+
+

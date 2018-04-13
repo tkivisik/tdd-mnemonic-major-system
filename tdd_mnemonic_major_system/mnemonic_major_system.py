@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import random
+
+class Challenge(object):
+    def __init__(self):
+        self.score = 0
+    
+    def exercise_char_to_num(self, set_length=1):
+        pass
+
+    def exercise_num_to_char(self, set_length=1):
+        pass
+    
+    def make_random_number(self, length):
+        number = []
+        for i in range(length):
+            number.append(str(random.randint(0,9)))
+        return "".join(number)
+
+    def make_random_string(self, length):
+        pass
 
 class CharacterMapping(object):
     def __init__(self):
