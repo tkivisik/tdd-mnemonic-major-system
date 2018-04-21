@@ -47,4 +47,67 @@ def test_character_to_digit_conversion_vocals(map, character, expected):
 def test_string_to_digits_conversion_vocals(map, string, expected):
     assert map.string_to_digits(string) == expected
 
+@pytest.mark.parametrize('task_string,user_input,expected', [
+    #('','' ,[]),('a','',['a']),('a','a' ,None), # Task should not be empty
+    ('1','l',[True]),
+    ('3','k',[False]),  # Mismapping is error
+    ('4','',[False]),   # Error for every number not mapped
+    ('2','kg',[True,False]),    # Number should be mapped to one of the options
+    ('2','gk',[True,False]),    # Number should be mapped to one of the options
+    ('1','ll',[True,False]),    # Additions are errors
+    ('1','kk',[False,False]),   # Mismapping and addition
+    ('1','kl',[False,False]),   # Shift is an error
 
+    ('12','',[False,False]),    # Error for every number not mapped
+    ('12','l',[True,False]),    # Error for every number not mapped
+    ('21','l',[False,False]),   # Shift is an error
+    ('22','kg',[True,True]),
+    ('12','lkm',[True,True,False]),     # Additions are errors
+    ('12','mlk',[False,False,False]),   # Shift is a full error
+
+    ('322','',[False,False,False]), # Error for every number not mapped
+    ('322','mmm' ,[True,False,False]),
+    ('223','mmm' ,[False,False,True]),
+    ('123','lkm',[True,True,True]),
+    ('123','lgm',[True,True,True]),
+    ('123','lkgm',[True,True,False,False]),
+
+    ('2','mprkvmptmg',[False,False,False,False,False,False,False,False,False,False]),
+    ])
+def test_verify_match_num_to_char_task(map, task_string, user_input, expected):
+    assert map.verify_match(task_string, user_input, num_to_char_task=True) == expected
+
+@pytest.mark.parametrize('task_string,user_input,expected', [
+    #('','' ,[]),('a','',['a']),('a','a' ,None), # Task should not be empty
+    ('l','1',[True]),
+    ('k','3',[False]),  # Mismapping is error
+    ('l','',[False]),   # Error for every task item not mapped
+    ('k','22',[True,False]),    # Character should be mapped to one number
+    ('g','22',[True,False]),    # Character should be mapped to one number
+    ('l','11',[True,False]),    # Additions are errors
+    ('l','21',[False,False]),    # Shift and additions are errors
+
+    ('kg','22',[True,True]),
+    ('lk','1',[True,False]),    # Error for every item not mapped
+    ('kk','1',[False,False]),   # Mismapping and missing an item
+    ('kl','1',[False,False]),   # Shift is an error
+    ('lk','',[False,False]),    # Error for every item not mapped
+    ('mm','333',[True,True, False]),    # Additions are errors
+    ('lk','123',[True,True,False]),     # Additions are errors
+    ('lk','312',[False,False,False]),   # Shift is a full error
+
+    ('lkm','123',[True,True,True]),
+    ('lgm','123',[True,True,True]),
+    ('lkm','',[False,False,False]), # Error for every number not mapped
+    ('kmm','222' ,[True,False,False]),
+    ('mmk','222' ,[False,False,True]),
+    ('lkm','1223',[True,True,False,False]),
+
+    ('l','0123456789',[False,False,False,False,False,False,False,False,False,False]),
+    ('mprkvmptmg','',[False,False,False,False,False,False,False,False,False,False]),
+    ])
+def test_verify_match_char_to_num_task(map, task_string, user_input, expected):
+    assert map.verify_match(task_string, user_input, num_to_char_task=False) == expected
+
+# TODO
+# * When user input is alphanum
